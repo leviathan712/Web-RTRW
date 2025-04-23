@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DataWargaResource\Pages;
 use App\Filament\Resources\DataWargaResource\RelationManagers;
-use App\Models\DataWarga;
+use App\Models\Data_Warga;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DataWargaResource extends Resource
 {
-    protected static ?string $model = DataWarga::class;
+    public static function getNavigationLabel(): string
+    {
+        return 'Data Warga';
+    }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Data_Warga::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
     public static function form(Form $form): Form
     {

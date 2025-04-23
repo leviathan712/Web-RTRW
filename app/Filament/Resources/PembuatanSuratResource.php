@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PembuatanSuratResource\Pages;
 use App\Filament\Resources\PembuatanSuratResource\RelationManagers;
-use App\Models\PembuatanSurat;
+use App\Models\Pembuatan_Surat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PembuatanSuratResource extends Resource
 {
-    protected static ?string $model = PembuatanSurat::class;
+    public static function getNavigationLabel(): string
+    {
+        return 'Pembuatan Surat';
+    }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Pembuatan_Surat::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     public static function form(Form $form): Form
     {

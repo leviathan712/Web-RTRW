@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('beritas', function (Blueprint $table) {
             $table->id();
+            $table->string('Judul Berita');
+            $table->text('Isi Berita');
+            $table->string('Tempat Kejadian');
+            $table->date('Tanggal');
             $table->timestamps();
         });
     }

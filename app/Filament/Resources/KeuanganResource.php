@@ -15,9 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class KeuanganResource extends Resource
 {
+    public static function getNavigationLabel(): string
+    {
+        return 'Keuangan';
+    }
+
     protected static ?string $model = Keuangan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wallet';
 
     public static function form(Form $form): Form
     {

@@ -2,28 +2,42 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BeritaResource\Pages;
-use App\Filament\Resources\BeritaResource\RelationManagers;
-use App\Models\Berita;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Berita;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\BeritaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\BeritaResource\RelationManagers;
 
 class BeritaResource extends Resource
 {
+    public static function getNavigationLabel(): string
+    {
+        return 'Berita';
+    }
+
     protected static ?string $model = Berita::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                TextInput::make('Judul Berita'),
+                DatePicker::make('Tanggal'),
+                Textarea::make('Isi Berita')
+                    ->rows(10)
+                    ->cols(20),
+                TextInput::make('Tempat Kejadian'),
             ]);
     }
 
@@ -31,7 +45,12 @@ class BeritaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('Judul Berita'),
+                TextColumn::make('Isi Berita')
+                    ->limit(100)
+                    ->wrap(),
+                TextColumn::make('Tanggal'),
+                TextColumn::make('Tempat Kejadian')
             ])
             ->filters([
                 //

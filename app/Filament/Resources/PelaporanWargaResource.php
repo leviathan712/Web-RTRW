@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PelaporanWargaResource\Pages;
 use App\Filament\Resources\PelaporanWargaResource\RelationManagers;
-use App\Models\PelaporanWarga;
+use App\Models\Pelaporan_Warga;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PelaporanWargaResource extends Resource
 {
-    protected static ?string $model = PelaporanWarga::class;
+    public static function getNavigationLabel(): string
+    {
+        return 'Pelaporan Warga';
+    }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Pelaporan_Warga::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
 
     public static function form(Form $form): Form
     {
