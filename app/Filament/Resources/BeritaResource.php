@@ -9,35 +9,31 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Http;
 use App\Filament\Resources\BeritaResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\BeritaResource\RelationManagers;
 
 class BeritaResource extends Resource
 {
+    protected static ?string $model = Berita::class;
+    protected static ?string $navigationGroup = 'Buat Pengumuman';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+
     public static function getNavigationLabel(): string
     {
         return 'Berita';
     }
 
-    protected static ?string $model = Berita::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('Judul Berita'),
-                DatePicker::make('Tanggal'),
-                Textarea::make('Isi Berita')
-                    ->rows(10)
-                    ->cols(20),
-                TextInput::make('Tempat Kejadian'),
+                TextInput::make('judul_berita')->label('Judul Berita')->required(),
+                DatePicker::make('tanggal')->required(),
+                Textarea::make('isi_berita')->label('Isi Berita')->rows(10)->required(),
+                TextInput::make('tempat_kejadian')->label('Tempat Kejadian'),
+
             ]);
     }
 
@@ -45,15 +41,10 @@ class BeritaResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Judul Berita'),
-                TextColumn::make('Isi Berita')
-                    ->limit(100)
-                    ->wrap(),
-                TextColumn::make('Tanggal'),
-                TextColumn::make('Tempat Kejadian')
-            ])
-            ->filters([
-                //
+                Tables\Columns\TextColumn::make('judul_berita'),
+                Tables\Columns\TextColumn::make('isi_berita')->limit(100)->wrap(),
+                Tables\Columns\TextColumn::make('tanggal'),
+                Tables\Columns\TextColumn::make('tempat_kejadian'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -67,15 +58,13 @@ class BeritaResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBeritas::route('/'),
+            'index' => Pages\ListBerita::route('/'),
             'create' => Pages\CreateBerita::route('/create'),
             'edit' => Pages\EditBerita::route('/{record}/edit'),
         ];

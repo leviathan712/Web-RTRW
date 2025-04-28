@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PelaporanWargaResource\Pages;
-use App\Filament\Resources\PelaporanWargaResource\RelationManagers;
+use App\Models\DataRt;
 use App\Models\Pelaporan_Warga;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,7 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class PelaporanWargaResource extends Resource
 {
@@ -19,6 +19,8 @@ class PelaporanWargaResource extends Resource
     {
         return 'Pelaporan Warga';
     }
+
+    protected static ?string $navigationGroup = 'Pelaporan Warga Online';
 
     protected static ?string $model = Pelaporan_Warga::class;
 
@@ -28,7 +30,39 @@ class PelaporanWargaResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Select::make('kategori')
+                    ->label('Kategori Laporan')
+                    ->options([
+                        'keamanan' => 'Keamanan',
+                        'kebersihan' => 'Kebersihan',
+                        'infrastruktur' => 'Infrastruktur',
+                    ])
+                    ->required()
+                    ->searchable(),
+
+                Forms\Components\Select::make('rt')
+                    ->label('RT Pelapor')
+                    ->options(fn () => DataRt::pluck('rt', 'rt')->toArray())
+                    ->required()
+                    ->searchable(),
+
+                Forms\Components\Textarea::make('deskripsi')
+                    ->label('Deskripsi Laporan')
+                    ->required(),
+
+                Forms\Components\FileUpload::make('foto')
+                    ->label('Foto Pendukung')
+                    ->disk('public') // Penting! simpan di disk 'public'
+                    ->directory('pelaporan-foto')
+                    ->image()
+                    ->imagePreviewHeight('150')
+                    ->maxSize(10240) // maksimal 10MB
+                    ->nullable()
+                    ->deleteUploadedFileUsing(function ($record) {
+                        if ($record && $record->foto) {
+                            Storage::disk('public')->delete($record->foto);
+                        }
+                    }),
             ]);
     }
 
@@ -36,32 +70,44 @@ class PelaporanWargaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('kategori')->label('Kategori'),
+                Tables\Columns\TextColumn::make('rt')->label('RT'),
+                Tables\Columns\TextColumn::make('deskripsi')->label('Deskripsi')->limit(50),
+                Tables\Columns\ImageColumn::make('foto')
+                    ->label('Foto')
+                    ->disk('public')
+                    ->height(50),
+                Tables\Columns\TextColumn::make('created_at')->label('Dilaporkan Pada')->dateTime('d M Y H:i'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('rt')
+                    ->label('Filter berdasarkan RT')
+                    ->options(fn () => DataRt::pluck('rt', 'rt')->toArray()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteAction::make(),
             ]);
+    }
+
+    protected static function modifyQueryUsing(Builder $query): Builder
+    {
+        if (auth()->user()->hasRole('RT')) {
+            return $query->where('rt', auth()->user()->rt);
+        }
+
+        return $query;
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPelaporanWargas::route('/'),
+            'index' => Pages\ListPelaporanWarga::route('/'),
             'create' => Pages\CreatePelaporanWarga::route('/create'),
             'edit' => Pages\EditPelaporanWarga::route('/{record}/edit'),
         ];

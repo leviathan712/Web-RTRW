@@ -6,9 +6,14 @@ use App\Filament\Resources\PelaporanWargaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListPelaporanWargas extends ListRecords
+class ListPelaporanWarga extends ListRecords
 {
     protected static string $resource = PelaporanWargaResource::class;
+
+    public function getTitle(): string
+    {
+        return 'Lapor Warga Online'; // Judul custom yang Anda inginkan
+    }
 
     protected function getHeaderActions(): array
     {

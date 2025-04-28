@@ -6,22 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('pelaporan__wargas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('data_warga', function (Blueprint $table) {
+            $table->string('rt', 3)->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('pelaporan__wargas');
+        Schema::table('data_warga', function (Blueprint $table) {
+            $table->integer('rt')->change();
+        });
     }
 };
