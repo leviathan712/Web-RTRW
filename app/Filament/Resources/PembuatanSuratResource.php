@@ -25,7 +25,7 @@ class PembuatanSuratResource extends Resource
 {
     public static function getNavigationLabel(): string
     {
-        return 'SKTM';
+        return 'Pembuatan Surat';
     }
 
     protected static ?string $model = Pembuatan_Surat::class;
