@@ -6,6 +6,8 @@
 /storage/*.key
 /storage/pail
 /vendor
+!storage/app/templates/**
+!storage/app/temp/**
 .env
 .env.backup
 .env.production
