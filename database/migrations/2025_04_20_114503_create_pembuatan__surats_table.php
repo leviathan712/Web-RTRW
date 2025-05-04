@@ -11,8 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembuatan__surats', function (Blueprint $table) {
+        Schema::create('pembuatan_surats', function (Blueprint $table) {
             $table->id();
+            $table->string('jenis_surat'); // sktm, skd, skp, skk
+            $table->string('nomor_surat');
+            $table->date('tanggal_surat');
+            $table->string('nama');
+            $table->string('nik', 16);
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
+            $table->string('jenis_kelamin');
+            $table->string('agama');
+            $table->string('pekerjaan');
+            $table->string('alamat');
+            $table->string('rt');
+            $table->string('rw');
+            $table->string('kelurahan');
+            $table->string('kecamatan');
+            $table->string('kota');
+            $table->text('keperluan');
+            $table->string('nama_ketua_rw')->default('BAMBANG SUDARSONO');
             $table->timestamps();
         });
     }
@@ -22,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembuatan__surats');
+        Schema::dropIfExists('pembuatan_surats');
     }
 };
