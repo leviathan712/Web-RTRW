@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kegiatan__wargas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('pembuatan_surats', function (Blueprint $table) {
+            $table->enum('status_verifikasi', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kegiatan__wargas');
+        Schema::table('pembuatan_surats', function (Blueprint $table) {
+            $table->dropColumn('is_verified');
+        });
     }
 };

@@ -20,7 +20,7 @@ class DataRtResource extends Resource
     }
 
     protected static ?string $navigationGroup = 'Data Lingkungan RW';
-    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -87,4 +87,6 @@ class DataRtResource extends Resource
             'edit' => Pages\EditDataRt::route('/{record}/edit'),
         ];
     }
+
+    
 }

@@ -13,7 +13,16 @@ class ListKeuangans extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Buat Keuangan')
+                ->icon('heroicon-o-plus'),
         ];
     }
+
+    public function getTitle(): string
+    {
+        return 'Keuangan RW.001';
+    }
+
+
 }

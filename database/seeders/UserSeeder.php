@@ -14,28 +14,28 @@ class UserSeeder extends Seeder
             'name' => 'Admin RW',
             'email' => 'admin@rw.test',
             'password' => Hash::make('password'),
-            'role' => 'admin',
+            'role' => 'Admin',
         ]);
 
         User::create([
             'name' => 'Ketua RT 01',
             'email' => 'rt01@rw.test',
             'password' => Hash::make('password'),
-            'role' => 'rt',
+            'role' => 'RT',
         ]);
 
         User::create([
             'name' => 'Ketua RW',
             'email' => 'rw@rw.test',
             'password' => Hash::make('password'),
-            'role' => 'rw',
+            'role' => 'RW',
         ]);
 
         User::create([
             'name' => 'Warga 1',
             'email' => 'warga1@rw.test',
             'password' => Hash::make('password'),
-            'role' => 'warga',
+            'role' => 'Warga',
             'rt' => 1,
         ]);
     }

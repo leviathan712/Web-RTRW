@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 class DataWargaResource extends Resource
@@ -37,6 +38,10 @@ class DataWargaResource extends Resource
                 ->label('Nama Lengkap')
                 ->required(),
 
+            Forms\Components\DatePicker::make('tanggal_lahir')
+                ->label('Tanggal Lahir')
+                ->required(),
+            
             Forms\Components\TextInput::make('email')
                 ->label('Email')
                 ->email()
@@ -50,7 +55,7 @@ class DataWargaResource extends Resource
                 ->label('Alamat')
                 ->nullable(),
 
-                Forms\Components\Select::make('rt')
+            Forms\Components\Select::make('rt')
                 ->label('RT')
                 ->options([
                     '001' => 'RT 001',
@@ -72,43 +77,65 @@ class DataWargaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            Tables\Columns\TextColumn::make('nik')
-                ->label('NIK')
-                ->searchable()
-                ->sortable(),
-
-            Tables\Columns\TextColumn::make('name')
-                ->label('Nama')
-                ->searchable()
-                ->sortable(),
-
-            Tables\Columns\TextColumn::make('email')
-                ->label('Email')
-                ->searchable()
-                ->sortable(),
-
-            Tables\Columns\TextColumn::make('no_hp')
-                ->label('No HP')
-                ->searchable(),
-
-            Tables\Columns\TextColumn::make('alamat')
-                ->label('Alamat'),
-
-            Tables\Columns\TextColumn::make('rt')
+        Tables\Columns\TextColumn::make('rt')
                 ->label('RT')
                 ->sortable(),
-        ])
-        ->filters([])
-        ->actions([
-            Tables\Actions\EditAction::make(),
-            Tables\Actions\DeleteAction::make(),
-        ])
-        ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
-        ]);
-    }
+                
+        Tables\Columns\TextColumn::make('nik')
+            ->label('NIK')
+            ->searchable()
+            ->sortable(),
+    
+        Tables\Columns\TextColumn::make('name')
+            ->label('Nama')
+            ->searchable()
+            ->sortable(),
+        
+        Tables\Columns\TextColumn::make('tanggal_lahir')
+            ->label('Tanggal Lahir')
+            ->date()
+            ->sortable(),
+    
+        Tables\Columns\TextColumn::make('email')
+            ->label('Email')
+            ->searchable()
+            ->sortable(),
+    
+        Tables\Columns\TextColumn::make('no_hp')
+            ->label('No HP')
+            ->searchable(),
+    
+        Tables\Columns\TextColumn::make('alamat')
+            ->label('Alamat'),
+    
+    ])
+    ->filters([
+        SelectFilter::make('rt')
+            ->label('Filter RT')
+            ->options([
+                '001' => 'RT 001',
+                '002' => 'RT 002',
+                '003' => 'RT 003',
+                '004' => 'RT 004',
+                '005' => 'RT 005',
+                '006' => 'RT 006',
+                '007' => 'RT 007',
+                '008' => 'RT 008',
+                '009' => 'RT 009',
+                '010' => 'RT 010',
+            ])
+    ])
+    ->actions([
+        Tables\Actions\EditAction::make(),
+        Tables\Actions\DeleteAction::make(),
+    ])
+    ->bulkActions([
+        Tables\Actions\BulkActionGroup::make([
+            Tables\Actions\DeleteBulkAction::make(),
+        ]),
+    ]);
+}
+
 
     public static function getRelations(): array
     {
@@ -129,10 +156,12 @@ class DataWargaResource extends Resource
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
+        // Filter by RT if the user role is 'rt'
         if ($user->role === 'rt') {
             return $query->where('rt', $user->rt);
         }
 
+        // Filter by user_id if the role is 'warga'
         if ($user->role === 'warga') {
             return $query->where('user_id', $user->id);
         }

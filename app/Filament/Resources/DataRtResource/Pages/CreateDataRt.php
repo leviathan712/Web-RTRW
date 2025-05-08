@@ -13,4 +13,6 @@ class CreateDataRt extends CreateRecord
     {
         return 'Buat Rukun Tetangga'; // Judul custom yang Anda inginkan
     }
+
+
 }

@@ -18,7 +18,9 @@ class ListBerita extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Berita') // Ubah label tombol di sini
+                ->icon('heroicon-o-plus'), // Tambahkan ikon jika diinginkan
         ];
     }
 }

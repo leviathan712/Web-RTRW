@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions;
+use Filament\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,6 +27,13 @@ class PelaporanWargaResource extends Resource
     protected static ?string $model = Pelaporan_Warga::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    
+    public static function createAction(): Action
+    {
+        return Action::make('create')
+            ->label('Buat Laporan Warga') // Ganti teks tombol di sini
+            ->icon('heroicon-o-plus'); // Menambahkan ikon jika diinginkan
+    }
 
     public static function form(Form $form): Form
     {
@@ -52,11 +61,14 @@ class PelaporanWargaResource extends Resource
 
                 Forms\Components\FileUpload::make('foto')
                     ->label('Foto Pendukung')
-                    ->disk('public') // Penting! simpan di disk 'public'
-                    ->directory('pelaporan-foto')
                     ->image()
+                    ->maxSize(10240) // 10 MB
+                    ->directory('pelaporan-foto') // storage/app/public/pelaporan-foto
+                    ->disk('public')
+                    ->preserveFilenames()
+                    ->live()
                     ->imagePreviewHeight('150')
-                    ->maxSize(10240) // maksimal 10MB
+                    ->visibility('public')
                     ->nullable()
                     ->deleteUploadedFileUsing(function ($record) {
                         if ($record && $record->foto) {
@@ -75,8 +87,10 @@ class PelaporanWargaResource extends Resource
                 Tables\Columns\TextColumn::make('deskripsi')->label('Deskripsi')->limit(50),
                 Tables\Columns\ImageColumn::make('foto')
                     ->label('Foto')
-                    ->disk('public')
-                    ->height(50),
+                    ->height(50)
+                    ->getStateUsing(fn ($record) => $record->foto ? asset('storage/pelaporan-foto/' . basename($record->foto)) : null)
+                    ->circular()
+                    ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('created_at')->label('Dilaporkan Pada')->dateTime('d M Y H:i'),
             ])
             ->filters([

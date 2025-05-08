@@ -15,6 +15,7 @@ class DataWarga extends Model
     protected $fillable = [
         'nik',
         'name',
+        'tanggal_lahir',
         'email',
         'no_hp',
         'alamat',

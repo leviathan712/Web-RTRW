@@ -30,10 +30,24 @@ class Pembuatan_Surat extends Model
         'kota',
         'keperluan',
         'nama_ketua_rw',
+        'status_verifikasi',
+        'alasan_ditolak',
     ];
 
     protected $casts = [
         'tanggal_surat' => 'date',
         'tanggal_lahir' => 'date',
     ];
+
+    public static function boot()
+{
+    parent::boot();
+
+    static::updated(function ($model) {
+        // Misalnya ada kode yang mengubah status_verifikasi
+        if ($model->is_verified) {
+            $model->update(['status_verifikasi' => 'Menunggu']);
+        }
+    });
+}
 }

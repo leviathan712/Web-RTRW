@@ -18,6 +18,10 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
+use Swis\Filament\Backgrounds\ImageProviders\MyImages;
+use App\Filament\Widgets\SuratStatsOverviewWidget;
+use App\Filament\Widgets\KeuanganTableWidget;
+use App\Filament\Widgets\BeritaWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -34,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->brandName('Pelayanan Masyarakat')
-            ->brandLogo(asset('images/logo-rw.png'))
+            ->brandLogo(asset('images/SILARWA.png'))
             ->brandLogoHeight('50px')
             ->favicon(asset('images/logo_Rw.ico'))
             ->pages([
@@ -46,10 +50,16 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                SuratStatsOverviewWidget::class,
+                KeuanganTableWidget::class,
+                BeritaWidget::class,
             ])
             ->plugins([
-                FilamentBackgroundsPlugin::make(),
+                FilamentBackgroundsPlugin::make()
+                ->ImageProvider(
+                    MyImages::make()
+                    ->directory('images/swisnl/filament-backgrounds/curated-by-swis')
+                ),
             ])
             ->middleware([
                 EncryptCookies::class,

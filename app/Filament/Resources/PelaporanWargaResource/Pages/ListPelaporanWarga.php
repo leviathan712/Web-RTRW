@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\PelaporanWargaResource\Pages;
 
 use App\Filament\Resources\PelaporanWargaResource;
@@ -18,7 +17,9 @@ class ListPelaporanWarga extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Buat Laporan Warga') // Ubah label tombol di sini
+                ->icon('heroicon-o-plus'), // Tambahkan ikon jika diinginkan
         ];
     }
 }

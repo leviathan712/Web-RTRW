@@ -14,7 +14,7 @@ class ListDataRts extends ListRecords
 
     public function getTitle(): string
     {
-        return 'Daftar Rukun Tetangga RW.009'; // Judul custom
+        return 'Daftar Rukun Tetangga RW.001'; // Judul custom
     }
 
     protected function getTableQuery(): Builder
@@ -35,10 +35,14 @@ class ListDataRts extends ListRecords
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data RT') // Ubah label tombol di sini
+                ->icon('heroicon-o-plus'), // Tambahkan ikon jika diinginkan
         ];
     }
+
+   
 }
